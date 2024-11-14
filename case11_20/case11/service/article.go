@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"interview-cases/case11/pb"
+	"github.com/redis/go-redis/v9"
+	"interview-cases/case11_20/case11/pb"
 	"time"
 
-	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 )
@@ -48,7 +48,6 @@ func (s *ArticleService) ListArticles(ctx context.Context, req *pb.ListArticlesR
 		s.setArticleListToRedis(ctx, key, resp.Articles)
 	}
 	return resp, err
-
 }
 
 func (s *ArticleService) getArticleListFromRedis(ctx context.Context, key string) (*pb.ListArticlesResponse, error) {
