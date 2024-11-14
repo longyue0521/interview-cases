@@ -165,7 +165,8 @@ func (rm *RedisManager) adjustWeight() {
 // main切换到backup的灰度需要拒绝main上的所有请求
 // backup切换到main的灰度需要
 func (rm *RedisManager) HeartbeatChecker(ctx context.Context) {
-	for {
+	ticker := time.NewTicker(time.Second)
+	for _ = range ticker.C {
 		err := rm.pingMainNode(ctx)
 		if err == nil {
 			if rm.mainNode.isActive == false {
@@ -194,8 +195,6 @@ func (rm *RedisManager) HeartbeatChecker(ctx context.Context) {
 				}
 			}
 		}
-
-		time.Sleep(time.Second) // 每隔 1 秒检查一次
 	}
 }
 
