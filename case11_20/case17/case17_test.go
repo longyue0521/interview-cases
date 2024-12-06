@@ -1,4 +1,4 @@
-package case22
+package case17
 
 import (
 	"context"
@@ -7,15 +7,15 @@ import (
 	"github.com/stretchr/testify/suite"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
-	"interview-cases/case21_30/case22/pb"
-	"interview-cases/case21_30/case22/service"
+	"interview-cases/case11_20/case17/pb"
+	"interview-cases/case11_20/case17/service"
 	"math"
 	"sort"
 	"sync"
 	"testing"
 
-	"interview-cases/case21_30/case22/interceptor"
-	"interview-cases/case21_30/case22/monitor"
+	"interview-cases/case11_20/case17/interceptor"
+	"interview-cases/case11_20/case17/monitor"
 	"log"
 	"net"
 	"time"
@@ -65,7 +65,6 @@ func (t *TestSuite) TestLimit() {
 	// 1. 先开10个goroutine，将获得的时间戳进行排序，相邻的时间戳差不多一致
 	// 2. 过了2s内存超过80%，触发限流。也是开10个goroutine，将获得的时间戳进行排序，相邻的时间戳相差100ms左右
 	// 3. 5s以后内存下降正常处理请求。10个goroutine获得的时间戳差不多一致
-
 
 	// endTime 限流结束的时间
 	endTime := time.Now().Add(5*time.Second + 10*time.Millisecond)
