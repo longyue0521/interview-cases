@@ -2,6 +2,7 @@ package case17
 
 import (
 	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -12,6 +13,7 @@ import (
 	"math"
 	"sort"
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	"interview-cases/case11_20/case17/interceptor"
@@ -75,13 +77,23 @@ func (t *TestSuite) TestLimit() {
 		assert.Equal(t.T(), true, diff < 10)
 	}
 	time.Sleep(2 * time.Second)
-	// 测试限流，请求是一个接一个，返回的时间戳差不多相差100ms
-	timeList2, err := t.getTimeList()
-	require.NoError(t.T(), err)
-	for i := 1; i < len(timeList2); i++ {
-		diff := int64(math.Abs(float64(timeList2[i] - timeList2[i-1])))
-		assert.Equal(t.T(), true, diff >= 100 && diff < 110)
+	// 测试限流，有9个限流了。
+	var eg errgroup.Group
+	var errCount int64
+	for i := 0; i < 10; i++ {
+		eg.Go(func() error {
+			_, eerr := t.client.Test(context.Background(), &pb.TestRequest{})
+			if eerr != nil {
+				fmt.Printf("%v\n", eerr)
+				atomic.AddInt64(&errCount, 1)
+			}
+			return nil
+		})
 	}
+	err = eg.Wait()
+	require.NoError(t.T(), err)
+	assert.Equal(t.T(), int64(10), errCount)
+
 	time.Sleep(endTime.Sub(time.Now()))
 	// 内存恢复正常，返回的时间戳差不多一致
 	timeList3, err := t.getTimeList()
