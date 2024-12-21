@@ -13,6 +13,7 @@ require (
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/stretchr/testify v1.9.0
+	go.uber.org/mock v0.5.0
 	golang.org/x/sync v0.8.0
 	google.golang.org/grpc v1.46.0
 	google.golang.org/protobuf v1.34.1
