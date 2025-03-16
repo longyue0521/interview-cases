@@ -45,8 +45,8 @@ func (s *Case3TestSuite) SetupSuite() {
 
 func (s *Case3TestSuite) TearDownSuite() {
 	// 如果你不希望测试结束就删除数据，你把这段代码注释掉
-	// err := s.db.Exec("TRUNCATE TABLE `payment_logs`").Error
-	// require.NoError(s.T(), err)
+	err := s.db.Exec("TRUNCATE TABLE `payment_logs`").Error
+	require.NoError(s.T(), err)
 }
 
 func (s *Case3TestSuite) TestIndexInvalidationTableLock() {
